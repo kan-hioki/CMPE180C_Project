@@ -15,7 +15,6 @@ uint32_t chk_free_frame()
 uint32_t page_out(uint32_t pgnum)
 {
 	char buf[FRAME_SIZE];
-	uint32_t free_frnum;
 	struct timeval min_reftime = frames[0].reftime;
 	int victim = 0;
 
