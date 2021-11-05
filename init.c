@@ -2,8 +2,10 @@
 
 #define BACKING_STORE	"BACKING_STORE.bin"
 
-void init()
+void init(int nFrames)
 {
+
+
 	// Initialize TLB
 	for (int i = 0; i < TLB_SIZE; i++) {
 		TLB[i].pgnum = -1;
@@ -14,8 +16,11 @@ void init()
 	for (int i = 0; i < PGTBL_SIZE; i++) {
 		PGTBL[i].frnum = -1;
 	}
-	
-	for (int i = 0; i < NUM_FRAME; i++) {
+
+	// Initialize frames
+	number_of_frames = nFrames;
+	frames = calloc(number_of_frames, sizeof(struct frame));	
+	for (int i = 0; i < number_of_frames; i++) {
 		frames[i].used = false;
 	}
 	
@@ -26,4 +31,9 @@ void init()
 		perror("fopen");
 		exit(1);
 	}
+}
+
+void dealloc()
+{
+	free(frames);
 }

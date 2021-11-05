@@ -10,12 +10,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
 #define TLB_SIZE	16
 #define PGTBL_SIZE	256
-#define NUM_FRAME	256
 #define FRAME_SIZE	256
 
-void init();
+void init(int nframes);
+void dealloc();
 uint32_t reference(uint32_t vaddr, int *ch);
 uint32_t search_TLB(uint32_t pgnum);
 void crt_TLB_entry(uint32_t pgnum, uint32_t frnum);
@@ -26,6 +27,11 @@ uint32_t chk_free_frame();
 void read_into_frame(uint32_t pgnum, uint32_t frnum);
 uint32_t page_out(uint32_t pgnum);
 void page_in(uint32_t pgnum, uint32_t frnum);
+
+FILE *bs; // Backing store
+int number_of_frames;
+int pfault_count;
+int TLBhit_count;
 
 /* Pretend to be physical memory */
 char memory[PGTBL_SIZE][FRAME_SIZE];
@@ -47,11 +53,6 @@ struct frame {
 	uint32_t pgnum;		// Page number bound to this frame
 	bool used;			// Validation flag
 	struct timeval reftime;	// Last referenced time
-} frames[NUM_FRAME];
-
-FILE *bs;	// Backing store
-
-int pfault_count;
-int TLBhit_count;
+} *frames;
 
 #endif

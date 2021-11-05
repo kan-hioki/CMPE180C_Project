@@ -1,8 +1,10 @@
 #include "vmm.h"
 
+extern int number_of_frames; 
+
 uint32_t chk_free_frame()
 {
-	for (int i = 0; i < NUM_FRAME; i++) {
+	for (int i = 0; i < number_of_frames; i++) {
 		if (frames[i].used == false) {
 			// Frame i is free
 			return i;
@@ -18,7 +20,7 @@ uint32_t page_out(uint32_t pgnum)
 	struct timeval min_reftime = frames[0].reftime;
 	int victim = 0;
 
-	for (int i = 1; i < NUM_FRAME; i++) {
+	for (int i = 1; i < number_of_frames; i++) {
 		// Search lasst-recently-referenced entry to be removed
 		if (frames[i].used == true && timercmp(&frames[i].reftime, &min_reftime, <)) {
 			min_reftime = frames[i].reftime;
