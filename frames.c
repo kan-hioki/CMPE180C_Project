@@ -30,8 +30,7 @@ uint32_t page_out(uint32_t pgnum)
 
 	// Write frame number of victim in backing store
 	memcpy(buf, memory[victim], FRAME_SIZE);
-	fseek(bs, pgnum*FRAME_SIZE, SEEK_SET);
-
+	fseek(bs, frames[victim].pgnum*FRAME_SIZE, SEEK_SET);
 	if (fwrite(buf, FRAME_SIZE, 1, bs) < 1) {
 		perror("fwrite");
 		exit(1);
@@ -46,9 +45,7 @@ uint32_t page_out(uint32_t pgnum)
 	PGTBL[pgnum].frnum = victim;
 	frames[victim].pgnum = -1;
 	frames[victim].used = false;
-
 	
-
 	return victim;
 }
 
